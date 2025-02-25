@@ -85,7 +85,7 @@ export async function GET() {
 }
 
 function formatStockData(priceTimeSeries, rsiData, realTimePrice, realTimeChange) {
-  const dates = Object.keys(priceTimeSeries).sort().slice(0, 89); // Get 89 days of historical data
+  const dates = Object.keys(priceTimeSeries).sort(); // Sort dates in ascending order
   const formattedData = [];
   let previousPrice = null;
   
@@ -131,7 +131,7 @@ function formatStockData(priceTimeSeries, rsiData, realTimePrice, realTimeChange
     low: realTimePrice - (Math.random() * 0.5), // Estimate
   });
   
-  return formattedData.reverse();
+  return formattedData;
 }
 
 function generateMockStockDataWithRealPrice(realTimePrice, realTimeChange) {
