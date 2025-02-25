@@ -1,8 +1,7 @@
-// app/page.js
 "use client";
 
 import { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function Home() {
   const [stockData, setStockData] = useState([]);
@@ -45,6 +44,7 @@ export default function Home() {
   const latestPrice = stockData[stockData.length - 1]?.price;
   const latestChange = stockData[stockData.length - 1]?.change;
   const latestRSI = stockData[stockData.length - 1]?.rsi;
+  const latestVolume = stockData[stockData.length - 1]?.volume;
 
   return (
     <main className="p-6">
@@ -171,6 +171,47 @@ export default function Home() {
               </div>
               <span className="ml-2">{interpretRSI(latestRSI)}</span>
             </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-4 rounded-lg shadow lg:col-span-2">
+          <h2 className="text-xl font-semibold mb-4">ปริมาณการซื้อขาย (Volume)</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={stockData}
+              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="date" 
+                tick={{ fontSize: 12 }}
+                interval="preserveStartEnd"
+              />
+              <YAxis 
+                tick={{ fontSize: 12 }}
+                tickFormatter={(value) => (value / 1000000).toFixed(1) + 'M'}
+              />
+              <Tooltip 
+                contentStyle={{ fontSize: 12 }}
+                formatter={(value) => [
+                  `${(value / 1000000).toFixed(2)}M`,
+                  'ปริมาณการซื้อขาย'
+                ]}
+              />
+              <Legend />
+              <Bar 
+                dataKey="volume" 
+                fill="#8884d8" 
+                name="ปริมาณการซื้อขาย"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="mt-4">
+            <p className="font-semibold">ปริมาณการซื้อขายล่าสุด: 
+              <span className="text-blue-600 ml-2">
+                {(latestVolume / 1000000).toFixed(2)}M หุ้น
+              </span>
+            </p>
           </div>
         </div>
       </div>
